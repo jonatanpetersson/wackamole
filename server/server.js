@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const { MongoClient } = require('mongodb');
 const client = new MongoClient(process.env.CONNECTIONSTRING);
@@ -14,7 +15,7 @@ const getHighScore = async (_, res) => {
       .collection("highscore")
       .find()
       .toArray();
-    res.setHeader('Access-Control-Allow-Origin', '*')
+    data.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
     res.json(data);
     console.log('Got Highscore')
   } catch (err) {
@@ -51,8 +52,9 @@ const postHighScore = async (req, res) => {
     await client.close();
     console.log('Connection to db closed');
   }
-}
+};
 
+app.use(cors());
 app.use(express.json());
 app.get('/api/highscore', getHighScore);
 app.post('/api/highscore', postHighScore);
