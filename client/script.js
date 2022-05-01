@@ -65,6 +65,7 @@ const loadGameMenu = () => {
 };
 
 const loadGameOn = () => {
+  state.counter = 0;
   main.innerHTML = gameOn;
   const whackCounter = document.querySelector('.gamestats__whacked');
   const mole = document.createElement('span');
